@@ -92,6 +92,7 @@ if (galleryMoreButton && salon.gallery.length > initialGalleryCount) {
 
   galleryMoreButton.addEventListener("click", () => {
     const expanded = galleryMoreButton.getAttribute("aria-expanded") !== "true";
+    const buttonTop = galleryMoreButton.getBoundingClientRect().top;
     galleryMoreButton.setAttribute("aria-expanded", String(expanded));
     const additionalCards = [...gallery.children].slice(initialGalleryCount);
     additionalCards.forEach(card => card.classList.toggle("is-hidden", !expanded));
@@ -99,7 +100,88 @@ if (galleryMoreButton && salon.gallery.length > initialGalleryCount) {
       ? 'Ver menos <span aria-hidden="true">↑</span>'
       : 'Ver mais <span aria-hidden="true">↓</span>';
     if (expanded) observeReveals(additionalCards);
+    else requestAnimationFrame(() => {
+      const shift = galleryMoreButton.getBoundingClientRect().top - buttonTop;
+      window.scrollTo({ top: window.scrollY + shift, behavior: "auto" });
+    });
   });
+}
+
+const packageTrack = document.querySelector("#package-track");
+const packageDots = document.querySelector("#package-dots");
+const packageWindow = document.querySelector(".package-window");
+const packageCount = document.querySelector("#package-count");
+const packagePlay = document.querySelector("#package-play");
+const packageCarousel = document.querySelector("#package-carousel");
+let activePackage = 0;
+let packageTimer;
+
+if (packageTrack && salon.packages?.length) {
+  const packageSlides = salon.packages.map((item, index) => {
+    const slide = document.createElement("article");
+    slide.className = "package-slide";
+    slide.setAttribute("role", "group");
+    slide.setAttribute("aria-roledescription", "slide");
+    slide.setAttribute("aria-label", `${index + 1} de ${salon.packages.length}`);
+    slide.innerHTML = `<img src="${item.image}" alt="${item.alt}" ${index === 0 ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async">`;
+    packageTrack.append(slide);
+
+    const dot = document.createElement("button");
+    dot.className = "package-dot";
+    dot.type = "button";
+    dot.setAttribute("aria-label", `Ver pacote ${index + 1}`);
+    dot.addEventListener("click", () => { showPackage(index); restartPackageTimer(); });
+    packageDots.append(dot);
+    return slide;
+  });
+
+  function showPackage(index) {
+    activePackage = (index + packageSlides.length) % packageSlides.length;
+    packageTrack.style.transform = `translateX(-${activePackage * 100}%)`;
+    packageSlides.forEach((slide, i) => slide.setAttribute("aria-hidden", String(i !== activePackage)));
+    [...packageDots.children].forEach((dot, i) => {
+      dot.classList.toggle("is-active", i === activePackage);
+      dot.setAttribute("aria-current", i === activePackage ? "true" : "false");
+    });
+    packageCount.textContent = `${String(activePackage + 1).padStart(2, "0")} / ${String(packageSlides.length).padStart(2, "0")}`;
+  }
+
+  function restartPackageTimer() {
+    window.clearInterval(packageTimer);
+    if (packagePlay.dataset.paused !== "true" && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      packageTimer = window.setInterval(() => showPackage(activePackage + 1), 7000);
+    }
+  }
+
+  document.querySelector(".package-previous").addEventListener("click", () => { showPackage(activePackage - 1); restartPackageTimer(); });
+  document.querySelector(".package-next").addEventListener("click", () => { showPackage(activePackage + 1); restartPackageTimer(); });
+  packagePlay.addEventListener("click", () => {
+    const paused = packagePlay.dataset.paused !== "true";
+    packagePlay.dataset.paused = String(paused);
+    packagePlay.textContent = paused ? "Reproduzir" : "Pausar";
+    packagePlay.setAttribute("aria-label", paused ? "Reproduzir apresentação automática" : "Pausar apresentação automática");
+    restartPackageTimer();
+  });
+
+  let pointerStart = null;
+  packageWindow.addEventListener("pointerdown", event => { pointerStart = event.clientX; }, { passive: true });
+  packageWindow.addEventListener("pointerup", event => {
+    if (pointerStart === null) return;
+    const difference = event.clientX - pointerStart;
+    pointerStart = null;
+    if (Math.abs(difference) < 45) return;
+    showPackage(activePackage + (difference < 0 ? 1 : -1));
+    restartPackageTimer();
+  }, { passive: true });
+  packageWindow.addEventListener("pointercancel", () => { pointerStart = null; });
+  packageCarousel.addEventListener("mouseenter", () => window.clearInterval(packageTimer));
+  packageCarousel.addEventListener("mouseleave", restartPackageTimer);
+  packageCarousel.addEventListener("focusin", () => window.clearInterval(packageTimer));
+  packageCarousel.addEventListener("focusout", event => {
+    if (!packageCarousel.contains(event.relatedTarget)) restartPackageTimer();
+  });
+  showPackage(0);
+  restartPackageTimer();
 }
 
 const tabs = document.querySelector("#category-tabs");
