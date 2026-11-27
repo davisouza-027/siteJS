@@ -22,6 +22,7 @@
       <a href="#inicio">Início</a>
       <a href="#studio">O studio</a>
       <a href="#servicos">Serviços</a>
+      <a href="#pacotes">Pacotes</a>
       <a href="#galeria">Cabelos</a>
       <a href="#contato">Contato</a>
       <a href="#localizacao">Localização</a>
@@ -88,6 +89,28 @@
       <div class="category-tabs" role="tablist" aria-label="Categorias de serviços" id="category-tabs"></div>
       <div class="service-list" id="service-list"></div>
       <p class="price-note">Valores sujeitos a alteração. Serviços indicados “a partir de” podem variar conforme avaliação e comprimento dos fios.</p>
+    </section>
+
+    <section class="packages-section" id="pacotes" aria-labelledby="packages-title">
+      <div class="section-heading packages-heading">
+        <div>
+          <div class="section-kicker">CUIDADOS ESPECIAIS</div>
+          <h2 id="packages-title">Pacotes <em>para você.</em></h2>
+        </div>
+        <p>Deslize para conhecer as opções e escolha seu próximo cuidado.</p>
+      </div>
+      <div class="package-carousel" id="package-carousel" aria-roledescription="carrossel" aria-label="Pacotes e ofertas do Studio">
+        <button class="package-arrow package-previous" type="button" aria-label="Ver pacote anterior">‹</button>
+        <div class="package-window" tabindex="0">
+          <div class="package-track" id="package-track" aria-live="polite"></div>
+        </div>
+        <button class="package-arrow package-next" type="button" aria-label="Ver próximo pacote">›</button>
+      </div>
+      <div class="package-controls">
+        <span class="package-count" id="package-count" aria-live="polite"></span>
+        <div class="package-dots" id="package-dots" role="group" aria-label="Escolher pacote"></div>
+        <button class="package-play" id="package-play" type="button" aria-label="Pausar apresentação automática">Pausar</button>
+      </div>
     </section>
 
     <section class="gallery-section" id="galeria">
@@ -182,23 +205,12 @@
 
         <div class="route-actions">
           <a class="route-button route-maps" data-address-link href="#" target="_blank" rel="noopener noreferrer">
-            <svg class="route-brand-icon maps-brand-icon" viewBox="0 0 32 32" aria-hidden="true">
-              <path fill="#4285F4" d="M16 3.2c-6.1 0-11 4.8-11 10.8 0 6.5 8.1 14 10.3 15.9.4.3.9.3 1.3 0C18.8 27.9 27 20.5 27 14c0-6-4.9-10.8-11-10.8Z"/>
-              <path fill="#34A853" d="M16 3.2C9.9 3.2 5 8 5 14c0 2.1.8 4.4 2.1 6.7l7.1-2.6 4.7-12.8A11 11 0 0 0 16 3.2Z"/>
-              <path fill="#FBBC04" d="M5 14c0 2.1.8 4.4 2.1 6.7l4.4-1.6-3.1-9.7A10.8 10.8 0 0 0 5 14Z"/>
-              <path fill="#EA4335" d="M16 3.2c-3.1 0-5.9 1.3-7.8 3.5l3.5 8.8 7.2-11.6A10.9 10.9 0 0 0 16 3.2Z"/>
-              <circle cx="16" cy="14" r="4.2" fill="#fff"/>
-              <circle cx="16" cy="14" r="2.3" fill="#4285F4"/>
-            </svg>
+            <img class="route-brand-icon maps-brand-icon" src="assets/simbolo_maps.png" alt="">
             Abrir no Google Maps <span>↗</span>
           </a>
 
           <a class="route-button route-waze" data-waze-link href="#" target="_blank" rel="noopener noreferrer">
-            <svg class="route-brand-icon waze-brand-icon" viewBox="0 0 32 32" aria-hidden="true">
-              <path fill="#33C5F3" d="M16 3C8.6 3 3.2 8.2 3.2 15.1c0 2.5.8 4.6 2.2 6.3l-.9 4.1c-.2.8.5 1.4 1.3 1.2l4.2-1.2c1.9 1 4 1.5 6.3 1.5 7.2 0 12.5-5.1 12.5-12S23.2 3 16 3Z"/>
-              <path fill="#fff" d="M9.2 14.3a2 2 0 1 1 4 0 2 2 0 0 1-4 0Zm9.6 0a2 2 0 1 1 4 0 2 2 0 0 1-4 0Z"/>
-              <path fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" d="M12.8 19.2c1.8 1.6 5.3 1.6 7.1 0m-5.8-6.1 2.1-2.5 2.4 2.5"/>
-            </svg>
+            <img class="route-brand-icon waze-brand-icon" src="assets/simbolo_waze.jpg" alt="">
             Abrir no Waze <span>↗</span>
           </a>
         </div>
