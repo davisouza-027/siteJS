@@ -111,7 +111,7 @@ const packageGrid = document.querySelector("#package-grid");
 
 function createPackagePhoto(photo, compact = false) {
   const figure = document.createElement("figure");
-  figure.className = `package-photo${compact ? " package-photo-compact" : ""}`;
+  figure.className = `package-photo${compact ? " package-photo-compact" : ""}${photo.fit === "contain" ? " package-photo-contain" : ""}`;
   const image = document.createElement("img");
   image.src = photo.src || photo.image;
   image.alt = photo.alt || photo.imageAlt || "";
@@ -126,11 +126,6 @@ function createPackagePhoto(photo, compact = false) {
     placeholder.hidden = false;
   }, { once: true });
   figure.append(image, placeholder);
-  if (photo.label) {
-    const label = document.createElement("figcaption");
-    label.textContent = photo.label;
-    figure.append(label);
-  }
   return figure;
 }
 
@@ -140,7 +135,7 @@ function renderPackage(item, index) {
   card.style.setProperty("--package-delay", `${Math.min(index * 55, 385)}ms`);
 
   const media = document.createElement("div");
-  media.className = item.images ? "package-photos package-photos-strip" : "package-photos";
+  media.className = item.images ? `package-photos package-photos-strip package-photos-${item.images.length}` : "package-photos";
   (item.images || [item]).forEach(photo => media.append(createPackagePhoto(photo, Boolean(item.images))));
 
   const content = document.createElement("div");
@@ -170,32 +165,31 @@ function renderPackage(item, index) {
       row.className = "package-option";
       const name = document.createElement("strong");
       name.textContent = option.name;
-      const value = document.createElement("span");
-      value.textContent = option.price;
-      const pix = document.createElement("small");
-      pix.textContent = `${option.pix} no Pix`;
-      row.append(name, value, pix);
+      const pix = document.createElement("span");
+      pix.className = "package-option-pix";
+      pix.textContent = `${option.pricePix} no Pix`;
+      const cardPrice = document.createElement("small");
+      cardPrice.className = "package-option-card";
+      cardPrice.textContent = `${option.priceCard} no cartão`;
+      row.append(name, pix, cardPrice);
       priceBlock.append(row);
     });
   } else {
     const price = document.createElement("strong");
-    price.className = "package-price";
-    price.textContent = item.price;
+    price.className = "package-price package-price-pix";
+    price.textContent = item.pricePix;
     priceBlock.append(price);
-    if (item.pix) {
-      const pix = document.createElement("span");
-      pix.className = "package-pix";
-      pix.textContent = `${item.pix} no Pix`;
-      priceBlock.append(pix);
-    } else if (item.detail?.includes("crédito")) {
-      const detail = document.createElement("span");
-      detail.className = "package-pix";
-      detail.textContent = item.detail;
-      priceBlock.append(detail);
-    }
+    const pixLabel = document.createElement("span");
+    pixLabel.className = "package-pix-label";
+    pixLabel.textContent = "no Pix";
+    priceBlock.append(pixLabel);
+    const cardPrice = document.createElement("span");
+    cardPrice.className = "package-price-card";
+    cardPrice.textContent = item.priceCard === "Consulte condições" ? "No cartão: consulte condições" : `${item.priceCard} no cartão`;
+    priceBlock.append(cardPrice);
   }
 
-  if (item.detail && !item.detail.includes("crédito")) {
+  if (item.detail) {
     const detail = document.createElement("p");
     detail.className = "package-detail";
     detail.textContent = item.detail;
