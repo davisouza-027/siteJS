@@ -27,14 +27,96 @@ window.SALON = {
     { image: "assets/cabelo-16.jpg", alt: "Cabelo médio liso castanho com mechas vermelhas vibrantes" }
   ],
   packages: [
-    { image: "assets/packages/cronograma-premium.jpg", alt: "Pacote Cronograma Premium com tratamentos capilares e brinde" },
-    { image: "assets/packages/terapia-capilar.jpg", alt: "Pacote de Terapia Capilar" },
-    { image: "assets/packages/programa-tratamento.jpg", alt: "Programa de tratamento com reconstrução, hidratação e nutrição" },
-    { image: "assets/packages/shake-queratina.jpg", alt: "Shake de queratina com corte e escova" },
-    { image: "assets/packages/pacote-escova.jpg", alt: "Pacote de escova" },
-    { image: "assets/packages/pacotes-mensais.jpg", alt: "Pacotes mensais para lavar e secar ou lavar e escovar" },
-    { image: "assets/packages/hidratacao-corte-escova.jpg", alt: "Oferta de hidratação, corte e escova" },
-    { image: "assets/packages/programa-completo.jpg", alt: "Programa de tratamento Beleza dos Cabelos" }
+    {
+      title: "Cronograma Premium",
+      eyebrow: "RITUAL DE TRATAMENTO",
+      description: "Uma sequência de cuidados para devolver vida, maciez e brilho aos fios.",
+      includes: ["Reconstrução", "Hidratação", "Nutrição", "Finalização com escova"],
+      image: "assets/packages/olenka-nutricao.webp",
+      imageAlt: "Kit de nutrição capilar Olenka Self Care+",
+      price: "R$ 370,00",
+      pix: "R$ 350,00"
+    },
+    {
+      title: "Terapia Capilar",
+      eyebrow: "CUIDADO DO COURO CABELUDO",
+      description: "Três encontros quinzenais com técnicas de cuidado e relaxamento.",
+      includes: ["Argiloterapia", "Reflexologia", "Laserterapia"],
+      images: [
+        { src: "assets/packages/argiloterapia.jfif", alt: "Aplicação de argila no couro cabeludo", label: "Argiloterapia" },
+        { src: "assets/packages/reflexologia.webp", alt: "Massagem relaxante durante a terapia capilar", label: "Reflexologia" },
+        { src: "assets/laserterapia.jpg", alt: "Laserterapia capilar", label: "Laserterapia", placeholder: true }
+      ],
+      price: "R$ 250,00",
+      detail: "3 sessões quinzenais · sem escova"
+    },
+    {
+      title: "Programa de Tratamento",
+      eyebrow: "CUIDADO COMPLETO",
+      description: "Um cuidado combinado para tratar os fios em diferentes etapas.",
+      includes: ["Reconstrução", "Hidratação", "Nutrição", "Finalização com escova"],
+      image: "assets/cabelo-06.jpg",
+      imageAlt: "Cabelos longos com brilho e reflexos quentes",
+      price: "R$ 295,00",
+      pix: "R$ 280,00",
+      detail: "Exceto cabelos extra longos ou volumosos"
+    },
+    {
+      title: "Beleza dos Cabelos",
+      eyebrow: "PROGRAMA DE TRATAMENTO",
+      description: "Reconstrução, hidratação e nutrição em um programa de cuidados.",
+      includes: ["Reconstrução", "Hidratação", "Nutrição"],
+      image: "assets/cabelo-12.jpg",
+      imageAlt: "Cabelos longos com reflexos claros e ondas",
+      price: "R$ 210,00 no Pix",
+      detail: "R$ 225,00 no crédito"
+    },
+    {
+      title: "Shake de Queratina",
+      eyebrow: "CORTE + ESCOVA",
+      description: "Tratamento com queratina acompanhado de corte e escova.",
+      includes: ["Shake de queratina", "Corte", "Escova"],
+      image: "assets/cabelo-03.jpg",
+      imageAlt: "Cabelos longos acobreados com ondas e brilho",
+      price: "R$ 159,90",
+      pix: "R$ 150,00",
+      detail: "Exceto cabelos extra longos ou volumosos"
+    },
+    {
+      title: "Shake de Queratina",
+      eyebrow: "ESCOVA",
+      description: "Um cuidado de queratina com finalização em escova.",
+      includes: ["Shake de queratina", "Escova"],
+      image: "assets/cabelo-08.jpg",
+      imageAlt: "Cabelos loiros longos e lisos",
+      price: "R$ 117,90",
+      pix: "R$ 110,00",
+      detail: "Exceto cabelos extra longos ou volumosos"
+    },
+    {
+      title: "Hidratação + Corte + Escova",
+      eyebrow: "OFERTA ESPECIAL",
+      description: "Uma pausa para hidratar, renovar o corte e sair com os fios finalizados.",
+      includes: ["Hidratação", "Corte", "Escova"],
+      image: "assets/cabelo-05.jpg",
+      imageAlt: "Cabelos longos com camadas suaves",
+      price: "R$ 128,90",
+      pix: "R$ 120,00",
+      detail: "Exceto cabelos extra longos ou volumosos"
+    },
+    {
+      title: "Pacotes Mensais",
+      eyebrow: "4 VISITAS",
+      description: "Escolha a rotina que combina com seus cuidados do mês.",
+      includes: ["Lavar e secar · 4 vezes", "Lavar e escovar · 4 vezes"],
+      image: "assets/cabelo-10.jpg",
+      imageAlt: "Cabelos castanhos com ondas suaves",
+      options: [
+        { name: "Lavar e secar", price: "R$ 160,00", pix: "R$ 150,00" },
+        { name: "Lavar e escovar", price: "R$ 226,00", pix: "R$ 220,00" }
+      ],
+      detail: "Valores no Pix indicados em cada opção"
+    }
   ],
   categories: [
     {
