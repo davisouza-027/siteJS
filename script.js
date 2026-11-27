@@ -107,81 +107,114 @@ if (galleryMoreButton && salon.gallery.length > initialGalleryCount) {
   });
 }
 
-const packageTrack = document.querySelector("#package-track");
-const packageDots = document.querySelector("#package-dots");
-const packageWindow = document.querySelector(".package-window");
-const packageCount = document.querySelector("#package-count");
-const packagePlay = document.querySelector("#package-play");
-const packageCarousel = document.querySelector("#package-carousel");
-let activePackage = 0;
-let packageTimer;
+const packageGrid = document.querySelector("#package-grid");
 
-if (packageTrack && salon.packages?.length) {
-  const packageSlides = salon.packages.map((item, index) => {
-    const slide = document.createElement("article");
-    slide.className = "package-slide";
-    slide.setAttribute("role", "group");
-    slide.setAttribute("aria-roledescription", "slide");
-    slide.setAttribute("aria-label", `${index + 1} de ${salon.packages.length}`);
-    slide.innerHTML = `<img src="${item.image}" alt="${item.alt}" ${index === 0 ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async">`;
-    packageTrack.append(slide);
-
-    const dot = document.createElement("button");
-    dot.className = "package-dot";
-    dot.type = "button";
-    dot.setAttribute("aria-label", `Ver pacote ${index + 1}`);
-    dot.addEventListener("click", () => { showPackage(index); restartPackageTimer(); });
-    packageDots.append(dot);
-    return slide;
-  });
-
-  function showPackage(index) {
-    activePackage = (index + packageSlides.length) % packageSlides.length;
-    packageTrack.style.transform = `translateX(-${activePackage * 100}%)`;
-    packageSlides.forEach((slide, i) => slide.setAttribute("aria-hidden", String(i !== activePackage)));
-    [...packageDots.children].forEach((dot, i) => {
-      dot.classList.toggle("is-active", i === activePackage);
-      dot.setAttribute("aria-current", i === activePackage ? "true" : "false");
-    });
-    packageCount.textContent = `${String(activePackage + 1).padStart(2, "0")} / ${String(packageSlides.length).padStart(2, "0")}`;
+function createPackagePhoto(photo, compact = false) {
+  const figure = document.createElement("figure");
+  figure.className = `package-photo${compact ? " package-photo-compact" : ""}`;
+  const image = document.createElement("img");
+  image.src = photo.src || photo.image;
+  image.alt = photo.alt || photo.imageAlt || "";
+  image.loading = "lazy";
+  image.decoding = "async";
+  const placeholder = document.createElement("span");
+  placeholder.className = "package-photo-placeholder";
+  placeholder.textContent = photo.placeholder ? "Foto de laserterapia" : "Imagem do pacote";
+  placeholder.hidden = true;
+  image.addEventListener("error", () => {
+    image.hidden = true;
+    placeholder.hidden = false;
+  }, { once: true });
+  figure.append(image, placeholder);
+  if (photo.label) {
+    const label = document.createElement("figcaption");
+    label.textContent = photo.label;
+    figure.append(label);
   }
+  return figure;
+}
 
-  function restartPackageTimer() {
-    window.clearInterval(packageTimer);
-    if (packagePlay.dataset.paused !== "true" && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      packageTimer = window.setInterval(() => showPackage(activePackage + 1), 7000);
+function renderPackage(item, index) {
+  const card = document.createElement("article");
+  card.className = `package-card reveal${index === 0 ? " package-card-featured" : ""}`;
+  card.style.setProperty("--package-delay", `${Math.min(index * 55, 385)}ms`);
+
+  const media = document.createElement("div");
+  media.className = item.images ? "package-photos package-photos-strip" : "package-photos";
+  (item.images || [item]).forEach(photo => media.append(createPackagePhoto(photo, Boolean(item.images))));
+
+  const content = document.createElement("div");
+  content.className = "package-card-content";
+  const eyebrow = document.createElement("span");
+  eyebrow.className = "package-eyebrow";
+  eyebrow.textContent = item.eyebrow;
+  const title = document.createElement("h3");
+  title.textContent = item.title;
+  const description = document.createElement("p");
+  description.className = "package-description";
+  description.textContent = item.description;
+  const list = document.createElement("ul");
+  list.className = "package-includes";
+  item.includes.forEach(text => {
+    const entry = document.createElement("li");
+    entry.textContent = text;
+    list.append(entry);
+  });
+  content.append(eyebrow, title, description, list);
+
+  const priceBlock = document.createElement("div");
+  priceBlock.className = "package-pricing";
+  if (item.options) {
+    item.options.forEach(option => {
+      const row = document.createElement("div");
+      row.className = "package-option";
+      const name = document.createElement("strong");
+      name.textContent = option.name;
+      const value = document.createElement("span");
+      value.textContent = option.price;
+      const pix = document.createElement("small");
+      pix.textContent = `${option.pix} no Pix`;
+      row.append(name, value, pix);
+      priceBlock.append(row);
+    });
+  } else {
+    const price = document.createElement("strong");
+    price.className = "package-price";
+    price.textContent = item.price;
+    priceBlock.append(price);
+    if (item.pix) {
+      const pix = document.createElement("span");
+      pix.className = "package-pix";
+      pix.textContent = `${item.pix} no Pix`;
+      priceBlock.append(pix);
+    } else if (item.detail?.includes("crédito")) {
+      const detail = document.createElement("span");
+      detail.className = "package-pix";
+      detail.textContent = item.detail;
+      priceBlock.append(detail);
     }
   }
 
-  document.querySelector(".package-previous").addEventListener("click", () => { showPackage(activePackage - 1); restartPackageTimer(); });
-  document.querySelector(".package-next").addEventListener("click", () => { showPackage(activePackage + 1); restartPackageTimer(); });
-  packagePlay.addEventListener("click", () => {
-    const paused = packagePlay.dataset.paused !== "true";
-    packagePlay.dataset.paused = String(paused);
-    packagePlay.textContent = paused ? "Reproduzir" : "Pausar";
-    packagePlay.setAttribute("aria-label", paused ? "Reproduzir apresentação automática" : "Pausar apresentação automática");
-    restartPackageTimer();
-  });
+  if (item.detail && !item.detail.includes("crédito")) {
+    const detail = document.createElement("p");
+    detail.className = "package-detail";
+    detail.textContent = item.detail;
+    priceBlock.append(detail);
+  }
 
-  let pointerStart = null;
-  packageWindow.addEventListener("pointerdown", event => { pointerStart = event.clientX; }, { passive: true });
-  packageWindow.addEventListener("pointerup", event => {
-    if (pointerStart === null) return;
-    const difference = event.clientX - pointerStart;
-    pointerStart = null;
-    if (Math.abs(difference) < 45) return;
-    showPackage(activePackage + (difference < 0 ? 1 : -1));
-    restartPackageTimer();
-  }, { passive: true });
-  packageWindow.addEventListener("pointercancel", () => { pointerStart = null; });
-  packageCarousel.addEventListener("mouseenter", () => window.clearInterval(packageTimer));
-  packageCarousel.addEventListener("mouseleave", restartPackageTimer);
-  packageCarousel.addEventListener("focusin", () => window.clearInterval(packageTimer));
-  packageCarousel.addEventListener("focusout", event => {
-    if (!packageCarousel.contains(event.relatedTarget)) restartPackageTimer();
-  });
-  showPackage(0);
-  restartPackageTimer();
+  const action = document.createElement("a");
+  action.className = "package-cta";
+  action.href = `https://wa.me/${moneyDigits}?text=${encodeURIComponent(`Olá, gostaria de saber mais sobre o pacote ${item.title} do Studio Janete Souza.`)}`;
+  action.target = "_blank";
+  action.rel = "noopener noreferrer";
+  action.textContent = "Consultar e agendar ↗";
+  card.append(media, content, priceBlock, action);
+  return card;
+}
+
+if (packageGrid && salon.packages?.length) {
+  salon.packages.forEach((item, index) => packageGrid.append(renderPackage(item, index)));
+  observeReveals(packageGrid.querySelectorAll(".reveal"));
 }
 
 const tabs = document.querySelector("#category-tabs");
