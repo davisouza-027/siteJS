@@ -26,6 +26,16 @@ window.SALON = {
     { image: "assets/cabelo-15.jpg", alt: "Cabelo longo loiro acinzentado com ondas" },
     { image: "assets/cabelo-16.jpg", alt: "Cabelo médio liso castanho com mechas vermelhas vibrantes" }
   ],
+  packages: [
+    { image: "assets/packages/cronograma-premium.jpg", alt: "Pacote Cronograma Premium com tratamentos capilares e brinde" },
+    { image: "assets/packages/terapia-capilar.jpg", alt: "Pacote de Terapia Capilar" },
+    { image: "assets/packages/programa-tratamento.jpg", alt: "Programa de tratamento com reconstrução, hidratação e nutrição" },
+    { image: "assets/packages/shake-queratina.jpg", alt: "Shake de queratina com corte e escova" },
+    { image: "assets/packages/pacote-escova.jpg", alt: "Pacote de escova" },
+    { image: "assets/packages/pacotes-mensais.jpg", alt: "Pacotes mensais para lavar e secar ou lavar e escovar" },
+    { image: "assets/packages/hidratacao-corte-escova.jpg", alt: "Oferta de hidratação, corte e escova" },
+    { image: "assets/packages/programa-completo.jpg", alt: "Programa de tratamento Beleza dos Cabelos" }
+  ],
   categories: [
     {
       name: "Cabelos",
